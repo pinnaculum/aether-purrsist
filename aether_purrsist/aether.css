@@ -1,0 +1,30 @@
+.aether-thread-body {
+  font: Times, 14pt;
+  font-size: 125%;
+  padding: 2px;
+  border: 1px solid black;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.aether-post {
+  font-size: 110%;
+  padding: 5px;
+  margin-left: 10px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.aether-post-cold {
+  background-color: #778899;
+  border: 1px solid black;
+}
+
+.aether-post-warm {
+  background-color: #deb887;
+  border: 1px solid black;
+}
+
+h3, h2 {
+  color: black;
+}

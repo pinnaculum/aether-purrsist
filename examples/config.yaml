@@ -1,0 +1,34 @@
+# IPFS settings
+ipfs:
+  maddr: '/dns4/localhost/tcp/5001'
+
+  # The IPNS key name to publish to (will be created if it doesn't exist)
+  ipns_key: aether.mirror
+
+  # Remote pinning config
+  pinremote:
+    enabled: False
+    service: web3s
+    pin_name: aether-mirror
+
+# Specify an Aether database to process (will use the default otherwise)
+# db_path: AetherDB.test.db
+
+# List of communities to archive
+# You can use (python) regular expressions here
+boards:
+  AskAether: {}
+  Decentralization: {}
+  Film: {}
+  FOSS: {}
+  Social: {}
+  Galacteek: {}
+  ipfs: {}
+  Prog*:
+    max_threads: 100
+
+  Science: {}
+  Linux: {}
+  Voat: {}
+  TheApplicationLibrary: {}
+  DistributedNetworks: {}

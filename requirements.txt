@@ -1,0 +1,6 @@
+aiofiles
+aioipfs==0.6.3
+markdown
+tortoise-orm
+PyYAML
+yattag
