@@ -6,9 +6,11 @@ class Threads(Model):
     Fingerprint = fields.CharField(pk=True, max_length=64)
     Board = fields.CharField(max_length=64)
 
-    Name = fields.CharField(max_length=255)
     Body = fields.TextField()
+    EncrContent = fields.TextField()
     Link = fields.CharField(max_length=5000)
+    Meta = fields.TextField()
+    Name = fields.CharField(max_length=255)
     Owner = fields.CharField(max_length=64)
     OwnerPublicKey = fields.CharField(max_length=64)
 
@@ -43,9 +45,12 @@ class Posts(Model):
     Parent = fields.CharField(max_length=64)  # parent post
 
     Body = fields.TextField()
-    Owner = fields.CharField(max_length=64)
     Creation = fields.IntField()
+    EncrContent = fields.TextField()
     LastUpdate = fields.IntField()
+    Meta = fields.TextField()
+    Owner = fields.CharField(max_length=64)
+    RealmId = fields.CharField(max_length=64)
 
     LocalArrival = fields.DatetimeField(auto_now=False)
     LastReferenced = fields.DatetimeField(auto_now=False)

@@ -17,10 +17,11 @@ import pkg_resources
 from yattag import Doc
 from yattag import indent
 
-from aether_purrsist.models import Boards
-from aether_purrsist.models import Posts
-from aether_purrsist.models import PublicKeys
-from aether_purrsist.models import Threads
+from .models import Boards
+from .models import Posts
+from .models import PublicKeys
+from .models import Threads
+from .md import is_markdown
 
 
 aethcssp = Path(pkg_resources.resource_filename('aether_purrsist',
@@ -122,6 +123,25 @@ def show_post_infos(doc: Doc, owner, obj: Union[Threads, Posts]) -> None:
         doc.stag('div', klass='clear')
 
 
+def show_body(doc: Doc, obj: Union[Threads, Posts]) -> None:
+    """
+    This function outputs the body of a post or thread.
+    It uses the markdown module if it detects markdown content.
+    """
+    if is_markdown(obj.Body):
+        with doc.tag('p'):
+            doc.asis(markdown.markdown(
+                obj.Body,
+                extensions=[
+                    'attr_list',
+                    'fenced_code'
+                ]
+            ))
+    else:
+        with doc.tag('pre'):
+            doc.text(obj.Body)
+
+
 async def thread_posts_output(doc: Doc,
                               board: Boards,
                               thread: Threads, posts):
@@ -141,8 +161,7 @@ async def thread_posts_output(doc: Doc,
                  klass='aether-post ' + pcssc()):
             show_post_infos(doc, owner, post)
 
-            with tag('p'):
-                doc.asis(markdown.markdown(post.Body))
+            show_body(doc, post)
 
             if len(replies) > 0:
                 await thread_posts_output(doc, board, thread, replies)
@@ -197,8 +216,7 @@ async def purrsist_thread(board: Boards,
                      klass='aether-thread-body'):
                 show_post_infos(doc, towner, thread)
 
-                with tag('p'):
-                    doc.asis(markdown.markdown(thread.Body))
+                show_body(doc, thread)
 
             with tag('div'):
                 await thread_posts_output(doc, board, thread, posts)
