@@ -1,30 +1,62 @@
 .aether-thread-body {
+  background-color: #292B2F;
   font: Times, 14pt;
-  font-size: 125%;
   padding: 2px;
   border: 1px solid black;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin-top: 2px;
+  margin-bottom: 2px;
 }
 
 .aether-post {
-  font-size: 110%;
-  padding: 5px;
+  padding: 2px;
   margin-left: 10px;
-  margin-top: 15px;
-  margin-bottom: 15px;
+  margin-bottom: 2px;
+}
+
+.aether-post-infos {
+  padding: 2px;
 }
 
 .aether-post-cold {
-  background-color: #778899;
+  background-color: #1B2B34;
+  border: 1px solid #6699CC;
+}
+
+.aether-post-gray {
+  background-color: #303236;
   border: 1px solid black;
 }
 
-.aether-post-warm {
-  background-color: #deb887;
-  border: 1px solid black;
+.aether-post-dark {
+  background-color: #16222A;
+  border: 1px solid white;
+}
+
+.purrsist-footer {
+  padding: 5px;
+  background-color: #16222A;
+  border: 1px solid white;
+}
+
+.aether-nickname {
+  color: #F99157;
+}
+
+
+.clear{
+  clear: both;
 }
 
 h3, h2 {
-  color: black;
+  color: #FAC863;
+}
+
+a {
+  font-size: 110%;
+  color: #F99157;
+}
+
+.thread-name a {
+  font-size: 200%;
+  color: #5FB3B3;
 }

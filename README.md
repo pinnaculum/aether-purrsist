@@ -11,7 +11,7 @@ It does not connect to the *Aether* network, but rather uses the
 *Aether* SQLite database.
 It produces a website that can be pinned to a remote IPFS pinning service.
 
-See [a demo here](https://bafybeicf4e3pegkyakiirhjhonczuiwm4u5slmgput7qnghmebrz7gyr5u.ipfs.dweb.link).
+See [a demo here](https://bafybeid3ee2vzhivgac62vkixqhgdlrntsto52ojh7hx4daqj5m4pxbtny.ipfs.dweb.link).
 
 Installation
 ------------
@@ -31,3 +31,18 @@ aether-purrsist -c config.yaml
 ```
 
 The website's CID will be echoed after it's finished.
+
+Configuration
+-------------
+
+The **ipfs.maddr** setting should be the multiaddr of your kubo's node
+API endpoint.
+
+The **ipfs.ipns_key** setting controls the name of the IPNS key
+to which the website will be published.
+
+To enable remote pinning, set *enabled* to *True* in the **ipfs.pinremote**
+section of the YAML config file. The *service* setting should match the name
+of the remote service as it's configured on your IPFS node. The *pin_name*
+setting is passed to the remote pinning service as the pin name for the
+archive.
