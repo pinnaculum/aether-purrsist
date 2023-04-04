@@ -17,11 +17,20 @@ from . import purrsist
 
 async def init():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--config',
-                        '-c',
-                        default='config.yaml',
-                        dest='config',
-                        help='Configuration file path')
+    parser.add_argument(
+        '--config',
+        '-c',
+        default='config.yaml',
+        dest='config',
+        help='Configuration file path'
+    )
+    parser.add_argument(
+        '--verbose',
+        '-v',
+        dest='verbose',
+        action='count',
+        default=0
+    )
     args = parser.parse_args()
 
     with open(args.config, 'rt') as fd:
@@ -45,7 +54,7 @@ async def init():
     )
     await Tortoise.generate_schemas()
 
-    await purrsist.purrsist(cfg)
+    await purrsist.purrsist(args, cfg)
 
 
 def start():

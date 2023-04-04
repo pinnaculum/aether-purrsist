@@ -6,6 +6,7 @@ import traceback
 from pathlib import Path
 from datetime import datetime
 from typing import Union
+from typing import List
 
 import aioipfs
 import aiofiles
@@ -21,6 +22,7 @@ from .models import Boards
 from .models import Posts
 from .models import PublicKeys
 from .models import Threads
+from .models import Votes
 from .md import is_markdown
 
 
@@ -36,12 +38,13 @@ def mkd(path: Path):
 
 async def boards_selection(boards_list: list):
     fps = []
+
     for board in await Boards.all().order_by('Name'):
-        for regex, item in boards_list.items():
+        for regex, bcfg in boards_list.items():
             if re.search(rf'^{regex}', board.Name) and \
                board.Fingerprint not in fps:
                 fps.append(board.Fingerprint)
-                yield board
+                yield board, bcfg
 
 
 async def write_doc(doc: Doc, path: Path) -> bool:
@@ -112,13 +115,45 @@ def show_date(doc: Doc, obj: Union[Threads, Boards, Posts]) -> None:
         doc.text(obj.LocalArrival.strftime('%d-%m-%Y %I:%M %p'))
 
 
-def show_post_infos(doc: Doc, owner, obj: Union[Threads, Posts]) -> None:
+def votes_score(votes: List[Votes]) -> int:
+    """
+    Compute the score for a post given a list of votes
+    """
+
+    score: int = 0
+
+    for vote in votes:
+        # Not sure what other values of TypeClass exist
+        if vote.TypeClass != 1:
+            continue
+
+        if vote.Type == 1:
+            score += 1
+        elif vote.Type == 2:
+            score -= 1
+
+    return score
+
+
+def show_score(doc: Doc, votes: List[Votes]) -> None:
+    score = votes_score(votes)
+
+    if score != 0:
+        with doc.tag('span',
+                     klass='arrow-up' if score > 0 else 'arrow-down'):
+            with doc.tag('span', style='padding-left: 24px'):
+                doc.text(score)
+
+
+def show_post_infos(doc: Doc, owner, obj: Union[Threads, Posts],
+                    votes: List[Votes] = []) -> None:
     with doc.tag('p', klass='aether-post-infos'):
         with doc.tag('div', style='float: left'):
             show_usernick(doc, owner)
 
         with doc.tag('div', style='float: right'):
             show_date(doc, obj)
+            show_score(doc, votes)
 
         doc.stag('div', klass='clear')
 
@@ -159,7 +194,14 @@ async def thread_posts_output(doc: Doc,
 
         with tag('div',
                  klass='aether-post ' + pcssc()):
-            show_post_infos(doc, owner, post)
+            show_post_infos(
+                doc, owner, post,
+                votes=await Votes.filter(
+                    Board=board.Fingerprint,
+                    Thread=thread.Fingerprint,
+                    Target=post.Fingerprint
+                )
+            )
 
             show_body(doc, post)
 
@@ -169,7 +211,8 @@ async def thread_posts_output(doc: Doc,
 
 async def purrsist_thread(board: Boards,
                           thread: Threads,
-                          threadp: Path) -> bool:
+                          threadp: Path,
+                          votes: List[Votes] = []) -> bool:
     """
     Purrsist a given thread with all its posts
     """
@@ -214,7 +257,8 @@ async def purrsist_thread(board: Boards,
         with tag('body'):
             with tag('div',
                      klass='aether-thread-body'):
-                show_post_infos(doc, towner, thread)
+                show_post_infos(doc, towner, thread,
+                                votes=votes)
 
                 show_body(doc, thread)
 
@@ -243,6 +287,9 @@ async def board_threads_index(board: Boards,
             doc.stag('link',
                      rel='stylesheet',
                      href='../style.css')
+            doc.stag('link',
+                     rel='stylesheet',
+                     href='../aether.css')
             with tag('title'):
                 text(f'Aether archive: {board.Name}')
 
@@ -257,9 +304,17 @@ async def board_threads_index(board: Boards,
 
                 with tag('ul'):
                     for thread in threads:
+                        votes = await Votes.filter(
+                            Board=board.Fingerprint,
+                            Thread=thread.Fingerprint,
+                            Target=thread.Fingerprint
+                        )
+
                         with tag('li'):
                             with tag('a', href=thread.Fingerprint):
                                 text(thread.Name)
+
+                            show_score(doc, votes)
 
             footer(doc)
 
@@ -295,7 +350,7 @@ async def boards_index(indexp: Path, boards):
     return await write_doc(doc, indexp)
 
 
-async def purrsist(cfg: dict) -> bool:
+async def purrsist(args, cfg: dict) -> bool:
     ipfscfg = cfg['ipfs']
 
     client = aioipfs.AsyncIPFS(
@@ -347,8 +402,13 @@ async def purrsist(cfg: dict) -> bool:
     boards = [b async for b in boards_selection(cfg['boards'])]
     vboards = []
 
-    for board in boards:
+    for board, board_cfg in boards:
+        thr_processed = 0
+        max_threads = board_cfg.get('max_threads', 0)
+        thread_filter = board_cfg.get('threads_ignore_byname', [])
+
         boardp = boardsp.joinpath(board.Fingerprint)
+
         mkd(boardp)
 
         thrs = await Threads.filter(Board=board.Fingerprint).order_by(
@@ -357,12 +417,34 @@ async def purrsist(cfg: dict) -> bool:
         if len(thrs) == 0:
             continue
 
+        if args.verbose > 0:
+            print(f'Processing board: {board.Name}')
+
         for thread in thrs:
+            if any(re.compile(reg).search(thread.Name)
+                   for reg in thread_filter):
+                continue
+
             threadp = boardp.joinpath(thread.Fingerprint)
+
+            if args.verbose > 1:
+                print(f'Processing thread: {thread.Name}')
 
             mkd(threadp)
 
-            await purrsist_thread(board, thread, threadp)
+            await purrsist_thread(
+                board, thread, threadp,
+                votes=await Votes.filter(
+                    Board=board.Fingerprint,
+                    Thread=thread.Fingerprint,
+                    Target=thread.Fingerprint
+                )
+            )
+
+            thr_processed += 1
+
+            if max_threads > 0 and thr_processed >= max_threads:
+                break
 
         await board_threads_index(board, boardp, thrs)
 

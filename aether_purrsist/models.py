@@ -2,20 +2,29 @@ from tortoise.models import Model
 from tortoise import fields
 
 
-class Threads(Model):
-    Fingerprint = fields.CharField(pk=True, max_length=64)
-    Board = fields.CharField(max_length=64)
+class Base(Model):
+    """
+    Common SQL fields in the Aether database
+    """
 
-    Body = fields.TextField()
     EncrContent = fields.TextField()
-    Link = fields.CharField(max_length=5000)
-    Meta = fields.TextField()
-    Name = fields.CharField(max_length=255)
-    Owner = fields.CharField(max_length=64)
-    OwnerPublicKey = fields.CharField(max_length=64)
+    Fingerprint = fields.CharField(pk=True, max_length=64)
 
     LocalArrival = fields.DatetimeField(auto_now=False)
     LastReferenced = fields.DatetimeField(auto_now=False)
+
+    Owner = fields.CharField(max_length=64)
+    OwnerPublicKey = fields.CharField(max_length=64)
+
+    Meta = fields.TextField()
+    RealmId = fields.CharField(max_length=64)
+
+
+class Threads(Base):
+    Board = fields.CharField(max_length=64)
+    Body = fields.TextField()
+    Link = fields.CharField(max_length=5000)
+    Name = fields.CharField(max_length=255)
 
 
 class PublicKeys(Model):
@@ -26,31 +35,27 @@ class PublicKeys(Model):
     PublicKey = fields.TextField()
 
 
-class Boards(Model):
-    Fingerprint = fields.CharField(pk=True, max_length=64)
+class Boards(Base):
     Name = fields.CharField(max_length=255)
-    Owner = fields.CharField(max_length=64)
-    OwnerPublicKey = fields.CharField(max_length=64)
     Description = fields.TextField()
     Creation = fields.IntField()
     Language = fields.CharField(max_length=3)
 
-    LocalArrival = fields.DatetimeField(auto_now=False)
 
-
-class Posts(Model):
-    Fingerprint = fields.CharField(pk=True, max_length=64)
+class Posts(Base):
     Board = fields.CharField(max_length=64)
     Thread = fields.CharField(max_length=64)  # thread it belongs to
     Parent = fields.CharField(max_length=64)  # parent post
 
     Body = fields.TextField()
     Creation = fields.IntField()
-    EncrContent = fields.TextField()
     LastUpdate = fields.IntField()
-    Meta = fields.TextField()
-    Owner = fields.CharField(max_length=64)
-    RealmId = fields.CharField(max_length=64)
 
-    LocalArrival = fields.DatetimeField(auto_now=False)
-    LastReferenced = fields.DatetimeField(auto_now=False)
+
+class Votes(Base):
+    Board = fields.CharField(max_length=64)
+    Thread = fields.CharField(max_length=64)
+    Target = fields.CharField(max_length=64)  # object voted on ?
+
+    Type = fields.IntField()
+    TypeClass = fields.IntField()

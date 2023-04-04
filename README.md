@@ -24,10 +24,17 @@ Usage
 -----
 
 Copy the *config.yaml* file from the *examples* directory and
-edit it if necessary. Then run it with the config path:
+edit it if necessary. Then run it with the config path (otherwise
+it will use the file named *config.yaml* in the current directory):
 
 ```sh
 aether-purrsist -c config.yaml
+```
+
+Use *-v* to increase verbosity:
+
+```sh
+aether-purrsist -vv
 ```
 
 The website's CID will be echoed after it's finished.

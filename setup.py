@@ -8,8 +8,8 @@ def reqs_parse(path):
 
 setup(
     name='aether-purrsist',
-    version='1.0.0',
-    description='Tool to archive Aether boards to IPFS',
+    version='1.1.0',
+    description='Tool to archive Aether boards to a static website in IPFS',
     packages=['aether_purrsist'],
     license='MIT',
     entry_points={
