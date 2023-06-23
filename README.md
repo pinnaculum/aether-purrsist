@@ -11,7 +11,7 @@ It does not connect to the *Aether* network, but rather uses the
 *Aether* SQLite database.
 It produces a website that can be pinned to a remote IPFS pinning service.
 
-See [a demo here](https://bafybeid3ee2vzhivgac62vkixqhgdlrntsto52ojh7hx4daqj5m4pxbtny.ipfs.dweb.link).
+See [a demo here](https://bafybeih76bk5mu35jwqf7wsbum56hc5pxolapfpvboeiab3x43kcpc426i.ipfs.dweb.link/) (sync date: *2023-06-23*).
 
 Installation
 ------------

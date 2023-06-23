@@ -56,6 +56,21 @@ a {
   color: #F99157;
 }
 
+img {
+  max-width: 75%;
+  object-fit: contain;
+}
+
+video {
+  object-fit: contain;
+  max-width: 75%;
+  height: auto;
+  overflow-clip-margin: content-box;
+  overflow: clip;
+  overflow-x: ;
+  overflow-y: ;
+}
+
 .thread-name a {
   font-size: 200%;
   color: #5FB3B3;
