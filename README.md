@@ -1,17 +1,17 @@
 aether-purrsist
 ===============
 
-[Aether](https://getaether.net/) is a P2P application (peer-to-peer forums).
-The content in *Aether* is ephemeral (6 months by default).
-
 This is a Python tool designed to archive the content of *Aether*
 communities (boards) in [IPFS](https://ipfs.tech).
+[Aether](https://getaether.net/) is a peer-to-peer forums application.
+The content in *Aether* is ephemeral (6 months by default).
 
 It does not connect to the *Aether* network, but rather uses the
 *Aether* SQLite database.
-It produces a website that can be pinned to a remote IPFS pinning service.
+It produces a website that can be pinned to a remote IPFS pinning service,
+as well as an Atom feed of all the Aether threads.
 
-See [a demo here](https://bafybeih76bk5mu35jwqf7wsbum56hc5pxolapfpvboeiab3x43kcpc426i.ipfs.dweb.link/) (sync date: *2023-06-23*).
+See [a demo here](https://bafybeiarckpnjohvpmpvmyivgvlzyme2fnmqh3nhcdske7lx6nxj5b7y7y.ipfs.dweb.link) ([Atom feed](https://bafybeiarckpnjohvpmpvmyivgvlzyme2fnmqh3nhcdske7lx6nxj5b7y7y.ipfs.dweb.link/atom.xml)) (sync date: *2023-06-25*).
 
 Installation
 ------------
