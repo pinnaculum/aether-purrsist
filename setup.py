@@ -9,6 +9,9 @@ def reqs_parse(path):
 setup(
     name='aether-purrsist',
     version='1.1.0',
+    author='cipres',
+    author_email='galacteek@protonmail.com',
+    url='https://gitlab.com/galacteek/aether-purrsist',
     description='Tool to archive Aether boards to a static website in IPFS',
     packages=['aether_purrsist'],
     license='MIT',
@@ -24,7 +27,7 @@ setup(
         ]
     },
     classifiers=[
-        'Development Status :: 4 - Beta',
+        'Development Status :: 2 - Pre-Alpha',
         'Environment :: Console',
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
