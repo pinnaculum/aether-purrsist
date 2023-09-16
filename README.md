@@ -11,7 +11,7 @@ It does not connect to the *Aether* network, but rather uses the
 It produces a website that can be pinned to a remote IPFS pinning service,
 as well as an Atom feed of all the Aether threads.
 
-See [a demo here](https://bafybeibjnqcvir4ec2hjju3wjvy754vydaqfwzj3tyz2yxjt32xv57ig3i.ipfs.dweb.link) ([Atom feed](https://bafybeibjnqcvir4ec2hjju3wjvy754vydaqfwzj3tyz2yxjt32xv57ig3i.ipfs.dweb.link/atom.xml)) (sync date: *2023-07-07*).
+See [a demo here](https://bafybeidhabl7v6d2a7tzifjq47euvmysbtoetvoos4xjcdsarlnfiaxxcm.ipfs.dweb.link) ([Atom feed](https://bafybeidhabl7v6d2a7tzifjq47euvmysbtoetvoos4xjcdsarlnfiaxxcm.ipfs.dweb.link/atom.xml)) (sync date: *2023-09-16*).
 
 # Installation
 
